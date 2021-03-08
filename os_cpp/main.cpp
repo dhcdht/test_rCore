@@ -8,7 +8,7 @@ extern "C"
 
 void cpp_main()
 {
-    console::puts("Hello rCore-Tutorial!");
+    console::puts("Hello cpp rCore-Tutorial!");
 
     sbi::shutdown();
 }
