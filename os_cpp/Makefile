@@ -12,8 +12,10 @@ build: $(BIN_FILE)
 
 # 编译 kernel
 kernel:
-	@riscv64-unknown-elf-gcc -c main.cpp -o ./build/main.o
-	@riscv64-unknown-elf-ld -Tlinker.ld ./build/main.o -o ${KERNEL_FILE}
+	@riscv64-unknown-elf-gcc -c main.cpp -o ./build/main.o -mcmodel=medany
+	@riscv64-unknown-elf-gcc -c sbi.cpp -o ./build/sbi.o -mcmodel=medany
+	@riscv64-unknown-elf-gcc -c console.cpp -o ./build/console.o -mcmodel=medany
+	@riscv64-unknown-elf-ld -Tlinker.ld ./build/*.o -o ${KERNEL_FILE}
 
 # 生成 kernel 的二进制文件
 $(BIN_FILE): kernel
