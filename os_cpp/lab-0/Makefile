@@ -1,24 +1,21 @@
-
-TARGET      := riscv64imac-unknown-none-elf
 MODE        := debug
-KERNEL_FILE := target/$(TARGET)/$(MODE)/os
-BIN_FILE    := target/$(TARGET)/$(MODE)/kernel.bin
+KERNEL_FILE := ./build/os.out
+BIN_FILE    := ./build/kernel.bin
 
-OBJDUMP     := rust-objdump --arch-name=riscv64
-OBJCOPY     := rust-objcopy --binary-architecture=riscv64
+OBJDUMP     := riscv64-unknown-elf-objdump
+OBJCOPY     := riscv64-unknown-elf-objcopy
 
 .PHONY: doc kernel build clean qemu run
 
 # 默认 build 为输出二进制文件
 build: $(BIN_FILE) 
 
-# 通过 Rust 文件中的注释生成 os 的文档
-doc:
-	@cargo doc --document-private-items
-
 # 编译 kernel
 kernel:
-	@cargo build
+	@riscv64-unknown-elf-gcc -c main.cpp -o ./build/main.o -mcmodel=medany
+	@riscv64-unknown-elf-gcc -c sbi.cpp -o ./build/sbi.o -mcmodel=medany
+	@riscv64-unknown-elf-gcc -c console.cpp -o ./build/console.o -mcmodel=medany
+	@riscv64-unknown-elf-ld -Tlinker.ld ./build/*.o -o ${KERNEL_FILE}
 
 # 生成 kernel 的二进制文件
 $(BIN_FILE): kernel
@@ -30,14 +27,14 @@ asm:
 
 # 清理编译出的文件
 clean:
-	@cargo clean
+	@rm -rf ./build/*
 
 # 运行 QEMU
 qemu: build
 	@qemu-system-riscv64 \
             -machine virt \
             -nographic \
-            -bios ../rustsbi-qemu.bin \
+            -bios ../../rustsbi-qemu.bin \
             -device loader,file=$(BIN_FILE),addr=0x80200000
 
 # 一键运行
