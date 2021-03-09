@@ -11,3 +11,9 @@ cpp and rust
 ![lab-0_rust](./readme_res/lab-0_rust.png)
 
 ---
+
+###[lab-1](https://github.com/rcore-os/rCore-Tutorial/tree/master/docs/lab-1/guide)
+
+![lab-1_rust](./readme_res/lab-1_rust.png)
+
+---
