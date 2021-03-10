@@ -41,9 +41,9 @@ pub extern "C" fn rust_main() -> ! {
 
     println!("Hello rust rCore-Tutorial!");
 
-    // unsafe {
-    //     llvm_asm!("ebreak"::::"volatile");
-    // };
+    unsafe {
+        llvm_asm!("ebreak"::::"volatile");
+    };
 
     // panic!("end of rust_main")
     loop{}

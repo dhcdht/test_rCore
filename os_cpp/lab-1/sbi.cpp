@@ -34,6 +34,10 @@ unsigned long sbi_call(call_enum which, unsigned long arg0 = 0, unsigned long ar
     return ret;
 }
 
+void set_timer(unsigned long time) {
+    sbi_call(call_enum::sbi_set_timer, time);
+}
+
 void console_putchar(char c) {
     sbi_call(call_enum::sbi_console_putchar, c);
 }

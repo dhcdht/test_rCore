@@ -4,13 +4,10 @@
 
 #include "interrupt.h"
 #include "../console.h"
+#include "timer.h"
 
 
 namespace interrupt {
-
-asm(
-    ".include \"./interrupt/interrupt.asm\""
-);
 
 extern "C" {
 
@@ -30,6 +27,8 @@ void init() {
     : "=r" (bits)
     : "i" (0x105)
     );
+
+    timer::init();
 
     console::puts("mod interrupt init");
 }

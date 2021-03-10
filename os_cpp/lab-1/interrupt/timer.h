@@ -6,9 +6,14 @@
 #define TEST_RCORE_TIMER_H
 
 
-class timer {
+namespace interrupt {
+namespace timer {
 
-};
+void init();
+void tick();
+
+}
+}
 
 
 #endif //TEST_RCORE_TIMER_H

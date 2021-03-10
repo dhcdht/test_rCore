@@ -26,7 +26,8 @@ void cpp_main()
 
     asm volatile ("ebreak");
 
-    sbi::shutdown();
+    while (1) {
+    }
 }
 
 asm(

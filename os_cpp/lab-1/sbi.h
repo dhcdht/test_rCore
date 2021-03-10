@@ -8,6 +8,7 @@
 
 namespace sbi {
 
+void set_timer(unsigned long time);
 void console_putchar(char c);
 unsigned long console_getchar();
 void shutdown();

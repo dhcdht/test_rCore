@@ -36,10 +36,6 @@ pub fn tick() {
         TICKS += 1;
         if TICKS % 3 == 0 {
             println!("{} tick", TICKS);
-
-            unsafe {
-                llvm_asm!("ebreak"::::"volatile");
-            };
         }
     }
 }
