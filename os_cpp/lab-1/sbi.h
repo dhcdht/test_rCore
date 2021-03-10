@@ -9,7 +9,7 @@
 namespace sbi {
 
 void console_putchar(char c);
-unsigned int console_getchar();
+unsigned long console_getchar();
 void shutdown();
 
 }

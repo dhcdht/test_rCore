@@ -19,12 +19,12 @@ enum call_enum {
     sbi_shutdown,
 };
 
-unsigned int sbi_call(call_enum which, unsigned int arg0 = 0, unsigned int arg1 = 0, unsigned int arg2 = 0) {
-    register unsigned int ret asm ("a0") = 0;
-    register unsigned int a7 asm ("a7") = which;
-    register unsigned int a0 asm ("a0") = arg0;
-    register unsigned int a1 asm ("a1") = arg1;
-    register unsigned int a2 asm ("a2") = arg2;
+unsigned long sbi_call(call_enum which, unsigned long arg0 = 0, unsigned long arg1 = 0, unsigned long arg2 = 0) {
+    register unsigned long ret asm ("a0") = 0;
+    register unsigned long a7 asm ("a7") = which;
+    register unsigned long a0 asm ("a0") = arg0;
+    register unsigned long a1 asm ("a1") = arg1;
+    register unsigned long a2 asm ("a2") = arg2;
     asm volatile ("ecall"
     : "+r" (ret)
     : "r" (a0), "r" (a1), "r" (a2), "r" (a7)
@@ -38,7 +38,7 @@ void console_putchar(char c) {
     sbi_call(call_enum::sbi_console_putchar, c);
 }
 
-unsigned int console_getchar() {
+unsigned long console_getchar() {
     return sbi_call(call_enum::sbi_console_getchar);
 }
 
