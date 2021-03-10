@@ -2,7 +2,7 @@
 #include "sbi.h"
 #include "console.h"
 //#include "interrupt/context.h"
-#include "interrupt/handler.h"
+#include "interrupt/interrupt.h"
 
 
 extern "C"
