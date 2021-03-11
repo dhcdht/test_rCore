@@ -27,7 +27,7 @@ void set_next_timeout() {
     );
 
     /// 时钟中断的间隔，单位是 CPU 指令
-    static unsigned int kInterval = 5000000;
+    static unsigned long kInterval = 5000000L;
 
     sbi::set_timer(time + kInterval);
 }
@@ -38,19 +38,20 @@ void init() {
      * // 开启 STIE，允许时钟中断
      * sie::set_stimer();
      */
-    unsigned long bits = 1 << 5;
-    asm volatile ("csrrc a0, %1, %0"
-    : "=r" (bits)
-    : "i" (0x104)
+    unsigned long bits = 1L << 5;
+    asm volatile ("csrrs a0, %1, %0"
+        :
+        : "r"(bits), "i"(0x104)
     );
     /*
      * rust
      * // 开启 SIE（不是 sie 寄存器），允许内核态被中断打断
      * sstatus::set_sie();
      */
-    asm volatile ("csrrc a0, %1, %0"
-    : "=r" (bits)
-    : "i" (0x100)
+    bits = 1 << 1;
+    asm volatile ("csrrs a0, %1, %0"
+        :
+        : "r"(bits), "i"(0x100)
     );
 
     // 设置下一次时钟中断

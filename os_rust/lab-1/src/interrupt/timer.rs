@@ -11,8 +11,20 @@ pub fn init() {
     unsafe {
         // 开启 STIE，允许时钟中断
         sie::set_stimer();
+        // = sie::set_stimer();
+        // let mut bits: usize = 1 << 5;
+        // llvm_asm!("csrrs x0, $1, $0"
+        //     :
+        //     : "r" (bits), "i" (0x104)
+        // );
         // 开启 SIE（不是 sie 寄存器），允许内核态被中断打断
         sstatus::set_sie();
+        // = sstatus::set_sie();
+        // bits = 1 << 1;
+        // llvm_asm!("csrrs x0, $1, $0"
+        //     :
+        //     : "r" (bits), "i" (0x100)
+        // );
     }
 
     // 设置下一次时钟中断
@@ -25,7 +37,17 @@ static INTERVAL: usize = 5000000;
 ///
 /// 获取当前时间，加上中断间隔，通过 SBI 调用预约下一次中断
 fn set_next_timeout() {
+    // let mut time: usize;
+    // unsafe {
+    //     llvm_asm!("csrrs $0, $1, x0"
+    //         : "=r" (time)
+    //         : "i" (0xC01)
+    //         : "volatile"
+    //     );
+    // }
+
     set_timer(time::read() + INTERVAL);
+    // set_timer(time + INTERVAL);
 }
 
 /// 触发时钟中断计数

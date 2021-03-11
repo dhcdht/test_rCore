@@ -44,21 +44,59 @@ asm(
  * 具体的中断类型需要根据 scause 来推断，然后分别处理
  */
 void handle_interrupt(Context &context, unsigned long scause, unsigned long stval) {
-    switch (scause) {
-        // 断点中断（ebreak）
-        case 3: {
-            breakpoint(context);
-        } break;
+    unsigned long mask = 1L << (sizeof(unsigned long) * 8 - 1);
+    /*
+     * 判断是 exception 还是 interrupt
+     * 参考 https://github.com/rcore-os/riscv/blob/master/src/register/scause.rs#L106
+     */
+    // exception
+    if ((scause&mask) == 0) {
+//        char str[3];
+//        str[0] = '0' + scause;
+//        str[1] = '0';
+//        str[2] = '\0';
+//        console::puts(str);
 
-        // 时钟中断
-        case 5: {
-            supervisor_timer(context);
-        } break;
+        switch (scause) {
+            // 断点中断（ebreak）
+            case 3: {
+                breakpoint(context);
+            } break;
 
-        // 其他情况，终止当前线程
-        default: {
-            fault(context, scause, stval);
-        } break;
+            // 其他情况，终止当前线程
+            default: {
+                fault(context, scause, stval);
+            } break;
+        }
+    }
+    // interrupt
+    else {
+        unsigned long scause_code = scause&!mask;
+
+//        char str[3];
+//        str[0] = '0' + scause_code;
+//        str[1] = '1';
+//        str[2] = '\0';
+//        console::puts(str);
+
+        switch (scause_code) {
+            /*
+             * todo: 这里中断类型有问题
+             * 目前是 case 0：，根据 https://github.com/rcore-os/riscv/blob/master/src/register/scause.rs#L22
+             * 解释为 Interrupt UserSoft 0
+             * 实际期望是 Interrupt SupervisorTimer 5
+             */
+            case 0:
+            // 时钟中断
+            case 5: {
+                supervisor_timer(context);
+            } break;
+
+            // 其他情况，终止当前线程
+            default: {
+                fault(context, scause, stval);
+            } break;
+        }
     }
 }
 
