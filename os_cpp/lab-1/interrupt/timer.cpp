@@ -21,7 +21,7 @@ void set_next_timeout() {
      * time::read()
      */
     unsigned long time = 0;
-    asm volatile ("csrrs %0, %1, a0"
+    asm volatile ("csrr %0, %1"
     : "=r" (time)
     : "i" (0xC01)
     );
@@ -39,9 +39,9 @@ void init() {
      * sie::set_stimer();
      */
     unsigned long bits = 1L << 5;
-    asm volatile ("csrrs a0, %1, %0"
+    asm volatile ("csrw %1, %0"
         :
-        : "r"(bits), "i"(0x104)
+        : "r" (bits), "i"(0x104)
     );
     /*
      * rust
@@ -49,9 +49,9 @@ void init() {
      * sstatus::set_sie();
      */
     bits = 1 << 1;
-    asm volatile ("csrrs a0, %1, %0"
+    asm volatile ("csrw %1, %0"
         :
-        : "r"(bits), "i"(0x100)
+        : "r" (bits), "i"(0x100)
     );
 
     // 设置下一次时钟中断

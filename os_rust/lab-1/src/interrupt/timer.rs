@@ -13,7 +13,7 @@ pub fn init() {
         sie::set_stimer();
         // = sie::set_stimer();
         // let mut bits: usize = 1 << 5;
-        // llvm_asm!("csrrs x0, $1, $0"
+        // llvm_asm!("csrw $1, $0"
         //     :
         //     : "r" (bits), "i" (0x104)
         // );
@@ -21,7 +21,7 @@ pub fn init() {
         sstatus::set_sie();
         // = sstatus::set_sie();
         // bits = 1 << 1;
-        // llvm_asm!("csrrs x0, $1, $0"
+        // llvm_asm!("csrw $1, $0"
         //     :
         //     : "r" (bits), "i" (0x100)
         // );
@@ -39,7 +39,7 @@ static INTERVAL: usize = 5000000;
 fn set_next_timeout() {
     // let mut time: usize;
     // unsafe {
-    //     llvm_asm!("csrrs $0, $1, x0"
+    //     llvm_asm!("csrr $0, $1"
     //         : "=r" (time)
     //         : "i" (0xC01)
     //         : "volatile"
