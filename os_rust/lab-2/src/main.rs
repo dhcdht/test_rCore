@@ -18,8 +18,12 @@
 //! - `#![feature(panic_info_message)]`
 //!   panic! 时，获取其中的信息并打印
 #![feature(panic_info_message)]
+#![feature(alloc_error_handler)]
 
 extern crate riscv;
+extern crate buddy_system_allocator;
+
+extern crate alloc;
 
 #[macro_use]
 mod console;
@@ -30,6 +34,7 @@ mod sbi;
 global_asm!(include_str!("entry.asm"));
 
 mod interrupt;
+mod memory;
 
 /// Rust 的入口函数
 ///
@@ -38,12 +43,12 @@ mod interrupt;
 pub extern "C" fn rust_main() -> ! {
     // 初始化各种模块
     interrupt::init();
+    memory::init();
 
     println!("Hello rust rCore-Tutorial!");
 
-    unsafe {
-        llvm_asm!("ebreak"::::"volatile");
-    };
+    memory::test();
+    interrupt::test();
 
     // panic!("end of rust_main")
     loop{}

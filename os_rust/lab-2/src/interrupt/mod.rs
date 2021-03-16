@@ -16,3 +16,13 @@ pub fn init() {
     timer::init();
     println!("mod interrupt initialized");
 }
+
+pub fn test() {
+    println!("Mod interrupt test start");
+
+    unsafe {
+        llvm_asm!("ebreak"::::"volatile");
+    };
+
+    println!("Mod interrupt test passed");
+}
